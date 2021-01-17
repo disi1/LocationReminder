@@ -34,7 +34,8 @@
             app:layout_constraintTop_toBottomOf="@+id/map_fragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:enabled="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

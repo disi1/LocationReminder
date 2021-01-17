@@ -12,8 +12,10 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,6 +32,7 @@ import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
+import java.util.*
 
 
 private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
@@ -38,7 +41,9 @@ private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
+    var marker: Marker? = null
     override val _viewModel: SaveReminderViewModel by inject()
+    private val selectLocationViewModel: SelectLocationViewModel by viewModels<SelectLocationViewModel>()
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var map: GoogleMap
@@ -78,24 +83,60 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setupMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+
+        selectLocationViewModel.selectedLocation.observe(viewLifecycleOwner, {
+            if(it != null) {
+                addMarker(it)
+                binding.saveLocationButton.isEnabled = true
+            }
+        })
+
         mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        setPoiClick(map)
+        setMapClick(map)
         goToCurrentLocation()
     }
 
     @SuppressLint("MissingPermission")
     private fun goToCurrentLocation() {
         if(foregroundAndBackgroundLocationPermissionGranted()) {
+            map.isMyLocationEnabled = true
+
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
                     val currentLatLng = LatLng(it.latitude, it.longitude)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
                 }
             }
+
+            Toast.makeText(requireContext(), R.string.select_location_or_poi, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun setPoiClick(map: GoogleMap) {
+        map.setOnPoiClickListener { poi ->
+            selectLocationViewModel.setSelectedLocation(poi = poi)
+        }
+    }
+
+    private fun setMapClick(map: GoogleMap) {
+        map.setOnMapClickListener { latLng ->
+            selectLocationViewModel.setSelectedLocation(latLng = latLng)
+        }
+    }
+
+    private fun addMarker(poi: PointOfInterest) {
+        marker?.remove()
+        marker = map.addMarker(
+                MarkerOptions()
+                        .position(poi.latLng)
+                        .title(poi.name)
+        )
+        marker?.showInfoWindow()
     }
 
     private fun onLocationSelected() {
@@ -171,7 +212,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                                     })
                                 }.show()
         } else {
-            map.isMyLocationEnabled = true
             checkDeviceLocationSettings()
         }
     }
