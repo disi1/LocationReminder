@@ -77,6 +77,7 @@ class ReminderListFragment : BaseFragment() {
 
     private fun setupRecyclerView() {
         val adapter = RemindersListAdapter {
+
         }
 
 //        setup the recycler view using the extension function
@@ -88,9 +89,9 @@ class ReminderListFragment : BaseFragment() {
             R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 requireActivity().startActivity(
                     intent
                 )
