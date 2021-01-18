@@ -7,6 +7,7 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -96,6 +97,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        Toast.makeText(requireContext(), R.string.select_location_or_poi, Toast.LENGTH_LONG).show()
+
+        setMapStyle(map)
         setPoiClick(map)
         setMapClick(map)
         goToCurrentLocation()
@@ -112,8 +116,20 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
                 }
             }
+        }
+    }
 
-            Toast.makeText(requireContext(), R.string.select_location_or_poi, Toast.LENGTH_LONG).show()
+    private fun setMapStyle(map: GoogleMap) {
+        try {
+            val success =  map.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style)
+            )
+
+            if(!success) {
+                Log.e(TAG, "Style parsing failed")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
         }
     }
 
@@ -263,17 +279,20 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
