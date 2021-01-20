@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -17,6 +19,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,20 +34,18 @@ import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import com.udacity.project4.utils.REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+import com.udacity.project4.utils.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+import com.udacity.project4.utils.REQUEST_TURN_DEVICE_LOCATION_ON
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.*
 
-
-private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
-private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
-private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
     var marker: Marker? = null
     override val _viewModel: SaveReminderViewModel by inject()
-    private val selectLocationViewModel: SelectLocationViewModel by viewModels<SelectLocationViewModel>()
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var map: GoogleMap
@@ -66,11 +67,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-//        TODO: add the map setup implementation
-//        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
-
         setupMap()
 
         return binding.root
@@ -85,19 +81,24 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun setupMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
 
-        selectLocationViewModel.selectedLocation.observe(viewLifecycleOwner, {
-            if(it != null) {
-                addMarker(it)
-                binding.saveLocationButton.isEnabled = true
-            }
-        })
-
         mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         Toast.makeText(requireContext(), R.string.select_location_or_poi, Toast.LENGTH_LONG).show()
+
+        _viewModel.selectedPOI.observe(viewLifecycleOwner, {
+            if(it != null) {
+                addMarker(it)
+                binding.saveLocationButton.isEnabled = true
+                _viewModel.reminderSelectedLocationStr.value = it.name
+                _viewModel.latitude.value = it.latLng.latitude
+                _viewModel.longitude.value = it.latLng.longitude
+            } else {
+                binding.saveLocationButton.isEnabled = false
+            }
+        })
 
         setMapStyle(map)
         setPoiClick(map)
@@ -135,13 +136,20 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
-            selectLocationViewModel.setSelectedLocation(poi = poi)
+            _viewModel.selectedPOI.value = poi
         }
     }
 
     private fun setMapClick(map: GoogleMap) {
         map.setOnMapClickListener { latLng ->
-            selectLocationViewModel.setSelectedLocation(latLng = latLng)
+
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+            val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+
+            val address: String = addresses[0].getAddressLine(0)
+
+            _viewModel.setSelectedLocationToPOI(latLng, address)
         }
     }
 
@@ -156,9 +164,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        findNavController().navigateUp()
     }
 
     @SuppressLint("MissingPermission")
@@ -245,7 +251,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if(exception is ResolvableApiException && resolve) {
 
                 try {
-                    startIntentSenderForResult(exception.resolution.intentSender, REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null);
+                    startIntentSenderForResult(exception.resolution.intentSender, REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null)
                 } catch (sendEx: IntentSender.SendIntentException) {
                     Log.d(TAG, "Error getting location settings resolution: " + sendEx.message)
                 }

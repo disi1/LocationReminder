@@ -7,7 +7,7 @@
     <string name="reminder_desc">Description</string>
     <string name="reminder_location">Reminder Location</string>
     <string name="save">Save</string>
-    <string name="reminder_saved">Reminder Saved !</string>
+    <string name="reminder_saved">Reminder Saved!</string>
     <string name="logout">Logout</string>
     <string name="welcome_to_the_location_reminder_app">Welcome to the location reminder app</string>
     <string name="login">Login</string>
@@ -30,8 +30,8 @@
     <string name="select_title">Please select title</string>
     <string name="select_location">Please select location</string>
     <string name="geofences_not_added">Problem in adding geofences.</string>
-    <string name="err_enter_title">Please enter title</string>
-    <string name="err_select_location">Please select location</string>
+    <string name="err_enter_title">Please enter a title</string>
+    <string name="err_select_location">Please select a location</string>
 
     <!-- Error strings -->
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
