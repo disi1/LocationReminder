@@ -86,7 +86,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        Toast.makeText(requireContext(), R.string.select_location_or_poi, Toast.LENGTH_LONG).show()
+        _viewModel.showToast.value = getString(R.string.select_location_or_poi)
 
         _viewModel.selectedPOI.observe(viewLifecycleOwner, {
             if(it != null) {
