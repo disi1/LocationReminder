@@ -1,10 +1,15 @@
 package com.udacity.project4.authentication
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -56,17 +61,48 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private fun launchSignInFlow() {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
+        if(isNetworkAvailable()) {
+            val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
 
-        startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
-                .setTheme(R.style.FirebaseAuthTheme)
-                .build(),
-            SIGN_IN_RESULT_CODE
-        )
+            startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
+                    .setTheme(R.style.FirebaseAuthTheme)
+                    .build(),
+                SIGN_IN_RESULT_CODE
+            )
+        }
+        else {
+            Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+                else -> false
+            }
+        } else {
+            return try {
+                if(connectivityManager.activeNetworkInfo == null) {
+                    false
+                } else {
+                    connectivityManager.activeNetworkInfo?.isConnected!!
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Connectivity error: $e")
+                false
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
