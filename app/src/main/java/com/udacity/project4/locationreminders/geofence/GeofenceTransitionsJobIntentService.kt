@@ -23,7 +23,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         get() = Dispatchers.IO + coroutineJob
 
     companion object {
-        private val TAG = GeofenceTransitionsJobIntentService::class.java.simpleName
         private const val JOB_ID = 573
 
         fun enqueueWork(context: Context, intent: Intent) {
@@ -53,7 +52,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
             val result = remindersLocalRepository.getReminder(requestId)
             if (result is Result.Success<ReminderDTO>) {
                 val reminderDTO = result.data
-                Log.e(TAG, "Reminder: $reminderDTO")
                 // send a notification to the user with the reminder details
                 sendNotification(
                     this@GeofenceTransitionsJobIntentService, ReminderDataItem(
