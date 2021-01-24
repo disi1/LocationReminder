@@ -38,10 +38,11 @@
     <string name="geofence_not_available">Geofence service is not available now. Go to Settings>Location>Mode and choose High accuracy.</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
-    <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+    <string name="error_adding_geofence">Error Happened, Can\'t add Geofence</string>
     <string name="let_s_go">Let\'s go</string>
     <string name="ready_to_sign_in">Ready to sign in?</string>
     <string name="welcome">Welcome</string>
     <string name="location_reminder">L O C A T I O N&#160; &#160;R E M I N D E R S</string>
     <string name="select_location_or_poi">Please tap to select a location or point of interest</string>
+    <string name="network_unavailable">Network not available!\nCheck your internet connection and try again.</string>
 </resources>
