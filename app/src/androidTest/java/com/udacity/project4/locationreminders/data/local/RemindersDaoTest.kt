@@ -44,7 +44,7 @@ class RemindersDaoTest {
     }
 
     @Test
-    fun saveReminderAndGetReminderById() = runBlockingTest {
+    fun saveReminder_getReminderById() = runBlockingTest {
         val reminder = ReminderDTO("title", "description", "location", 0.0, 0.0)
         database.reminderDao().saveReminder(reminder)
 
