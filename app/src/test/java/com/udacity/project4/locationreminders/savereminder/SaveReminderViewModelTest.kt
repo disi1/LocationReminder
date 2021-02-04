@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.savereminder
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -73,7 +74,7 @@ class SaveReminderViewModelTest {
 
         saveReminderViewModel.saveReminder(reminder)
 
-        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`("Reminder Saved!"))
+        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.reminder_saved)))
         assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue(), `is`(NavigationCommand.Back))
     }
 
