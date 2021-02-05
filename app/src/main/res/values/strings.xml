@@ -7,7 +7,7 @@
     <string name="reminder_desc">Description</string>
     <string name="reminder_location">Reminder Location</string>
     <string name="save">Save</string>
-    <string name="reminder_saved">Reminder Saved !</string>
+    <string name="reminder_saved">Reminder Saved!</string>
     <string name="logout">Logout</string>
     <string name="welcome_to_the_location_reminder_app">Welcome to the location reminder app</string>
     <string name="login">Login</string>
@@ -30,14 +30,19 @@
     <string name="select_title">Please select title</string>
     <string name="select_location">Please select location</string>
     <string name="geofences_not_added">Problem in adding geofences.</string>
-    <string name="welcome">Welcome</string>
-    <string name="err_enter_title">Please enter title</string>
-    <string name="err_select_location">Please select location</string>
+    <string name="err_enter_title">Please enter a title</string>
+    <string name="err_select_location">Please select a location</string>
 
     <!-- Error strings -->
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
     <string name="geofence_not_available">Geofence service is not available now. Go to Settings>Location>Mode and choose High accuracy.</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
-    <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+    <string name="error_adding_geofence">Error Happened, Can\'t add Geofence</string>
+    <string name="let_s_go">Let\'s go</string>
+    <string name="ready_to_sign_in">Ready to sign in?</string>
+    <string name="welcome">Welcome</string>
+    <string name="location_reminder">L O C A T I O N&#160; &#160;R E M I N D E R S</string>
+    <string name="select_location_or_poi">Please tap to select a location or point of interest</string>
+    <string name="network_unavailable">Network not available!\nCheck your internet connection and try again.</string>
 </resources>

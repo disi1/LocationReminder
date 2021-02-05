@@ -1,8 +1,11 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import android.location.Address
+import android.location.Geocoder
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
@@ -12,6 +15,7 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import kotlinx.coroutines.launch
 
+
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
     val reminderTitle = MutableLiveData<String?>()
@@ -20,6 +24,10 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val selectedPOI = MutableLiveData<PointOfInterest>()
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
+
+    fun setSelectedLocationToPOI(latLng: LatLng, address: String) {
+        selectedPOI.value = PointOfInterest(latLng, null, address)
+    }
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -36,10 +44,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
-    fun validateAndSaveReminder(reminderData: ReminderDataItem) {
-        if (validateEnteredData(reminderData)) {
+    fun validateAndSaveReminder(reminderData: ReminderDataItem): Boolean {
+        val dataIsValid = validateEnteredData(reminderData)
+        if (dataIsValid) {
             saveReminder(reminderData)
         }
+        return dataIsValid
     }
 
     /**
@@ -49,14 +59,14 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(
-                ReminderDTO(
-                    reminderData.title,
-                    reminderData.description,
-                    reminderData.location,
-                    reminderData.latitude,
-                    reminderData.longitude,
-                    reminderData.id
-                )
+                    ReminderDTO(
+                            reminderData.title,
+                            reminderData.description,
+                            reminderData.location,
+                            reminderData.latitude,
+                            reminderData.longitude,
+                            reminderData.id
+                    )
             )
             showLoading.value = false
             showToast.value = app.getString(R.string.reminder_saved)
