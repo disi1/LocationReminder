@@ -24,6 +24,7 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.junit.After
@@ -41,18 +42,29 @@ import org.koin.test.get
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 //END TO END test to black box test the app
-class RemindersActivityTest :
-    AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
+class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
     private lateinit var activity: RemindersActivity
-    private lateinit var viewModel: SaveReminderViewModel
+    private lateinit var saveReminderViewModel: SaveReminderViewModel
 
     @get:Rule
     var activityTestRule: ActivityTestRule<RemindersActivity> = ActivityTestRule(RemindersActivity::class.java)
+
+    @Before
+    fun registerIdlingResource() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
+    }
+
+    @After
+    fun unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
 
     /**
      * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
@@ -75,7 +87,7 @@ class RemindersActivityTest :
                     get() as ReminderDataSource
                 )
             }
-            single { RemindersLocalRepository(get()) as ReminderDataSource }
+            single { RemindersLocalRepository(get()) as ReminderDataSource}
             single { LocalDB.createRemindersDao(appContext) }
         }
         //declare a new koin module
@@ -84,7 +96,7 @@ class RemindersActivityTest :
         }
         //Get our real repository
         repository = get()
-        viewModel = get()
+        saveReminderViewModel = get()
         activity = activityTestRule.activity
 
         //clear the data to start fresh
@@ -93,29 +105,22 @@ class RemindersActivityTest :
         }
     }
 
-    @Before
-    fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-    }
-
     @Test
     fun addReminder_validateItInTheList() {
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.addReminderFAB)).perform(click())
 
-        viewModel.reminderSelectedLocationStr.postValue("Location")
-        viewModel.latitude.postValue(0.0)
-        viewModel.longitude.postValue(0.0)
+        onView(withId(R.id.selectLocation)).perform(click())
+        onView(withId(R.id.fragment_select_location)).perform(click())
+        runBlocking {
+            delay(1000)
+        }
+        val selectedLocation = saveReminderViewModel.reminderSelectedLocationStr.value
+        onView(withId(R.id.save_location_button)).perform(click())
+
         onView(withId(R.id.reminderTitle)).perform(typeText("Title"))
         onView(withId(R.id.reminderDescription)).perform(typeText("Description"))
         closeSoftKeyboard()
@@ -124,7 +129,7 @@ class RemindersActivityTest :
         onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withText("Title")).check(matches(isDisplayed()))
         onView(withText("Description")).check(matches(isDisplayed()))
-        onView(withText("Location")).check(matches(isDisplayed()))
+        onView(withText(selectedLocation)).check(matches(isDisplayed()))
 
         onView(withText(R.string.reminder_saved)).inRoot(
             RootMatchers.withDecorView(
@@ -142,12 +147,12 @@ class RemindersActivityTest :
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.addReminderFAB)).perform(click())
 
-        viewModel.reminderSelectedLocationStr.postValue("Location")
-        viewModel.latitude.postValue(0.0)
-        viewModel.longitude.postValue(0.0)
+        saveReminderViewModel.reminderSelectedLocationStr.postValue("Location")
+        saveReminderViewModel.latitude.postValue(0.0)
+        saveReminderViewModel.longitude.postValue(0.0)
 
         onView(withId(R.id.reminderDescription)).perform(typeText("Description"))
         closeSoftKeyboard()
@@ -170,7 +175,7 @@ class RemindersActivityTest :
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.addReminderFAB)).perform(click())
 
         onView(withId(R.id.reminderTitle)).perform(typeText("Title"))

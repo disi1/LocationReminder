@@ -46,8 +46,7 @@ android {
     }
 
     packagingOptions {
-//         pickFirst "META-INF/DEPENDENCIES"
-        pickFirst  'META-INF/*'
+        exclude "META-INF/*"
     }
 }
 
