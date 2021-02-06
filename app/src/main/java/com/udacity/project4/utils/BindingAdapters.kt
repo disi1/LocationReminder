@@ -1,10 +1,13 @@
 package com.udacity.project4.utils
 
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.project4.base.BaseRecyclerViewAdapter
+import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 
 
 object BindingAdapters {
@@ -41,6 +44,19 @@ object BindingAdapters {
             } else {
                 if (view.visibility == View.VISIBLE)
                     view.fadeOut()
+            }
+        }
+    }
+
+    @BindingAdapter("descriptionVisibility")
+    @JvmStatic
+    fun TextView.setDescriptionVisibility(item: ReminderDataItem) {
+        Log.i("aa", "item: $item")
+        item.let {
+            visibility = if(item.description == "" || item.description == null) {
+                View.GONE
+            } else {
+                View.VISIBLE
             }
         }
     }
