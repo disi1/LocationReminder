@@ -41,7 +41,8 @@ class SaveReminderViewModelTest {
     fun setupViewModel() {
         stopKoin()
 
-        saveReminderViewModel = SaveReminderViewModel(ApplicationProvider.getApplicationContext(), fakeDataSource)
+        saveReminderViewModel =
+            SaveReminderViewModel(ApplicationProvider.getApplicationContext(), fakeDataSource)
     }
 
     @Test
@@ -74,8 +75,17 @@ class SaveReminderViewModelTest {
 
         saveReminderViewModel.saveReminder(reminder)
 
-        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.reminder_saved)))
-        assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue(), `is`(NavigationCommand.Back))
+        assertThat(
+            saveReminderViewModel.showToast.getOrAwaitValue(),
+            `is`(
+                ApplicationProvider.getApplicationContext<Context>()
+                    .getString(R.string.reminder_saved)
+            )
+        )
+        assertThat(
+            saveReminderViewModel.navigationCommand.getOrAwaitValue(),
+            `is`(NavigationCommand.Back)
+        )
     }
 
     @Test
@@ -84,7 +94,10 @@ class SaveReminderViewModelTest {
 
         saveReminderViewModel.saveReminder(reminder)
 
-        assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue(), `is`(NavigationCommand.Back))
+        assertThat(
+            saveReminderViewModel.navigationCommand.getOrAwaitValue(),
+            `is`(NavigationCommand.Back)
+        )
     }
 
     @Test
@@ -103,7 +116,10 @@ class SaveReminderViewModelTest {
         val result = saveReminderViewModel.validateEnteredData(reminder)
 
         assertThat(result, `is`(false))
-        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(), `is`(R.string.err_enter_title))
+        assertThat(
+            saveReminderViewModel.showSnackBarInt.getOrAwaitValue(),
+            `is`(R.string.err_enter_title)
+        )
     }
 
     @Test
@@ -113,7 +129,10 @@ class SaveReminderViewModelTest {
         val result = saveReminderViewModel.validateEnteredData(reminder)
 
         assertThat(result, `is`(false))
-        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(), `is`(R.string.err_select_location))
+        assertThat(
+            saveReminderViewModel.showSnackBarInt.getOrAwaitValue(),
+            `is`(R.string.err_select_location)
+        )
     }
 
     @Test

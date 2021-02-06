@@ -51,9 +51,8 @@ object BindingAdapters {
     @BindingAdapter("descriptionVisibility")
     @JvmStatic
     fun TextView.setDescriptionVisibility(item: ReminderDataItem) {
-        Log.i("aa", "item: $item")
         item.let {
-            visibility = if(item.description == "" || item.description == null) {
+            visibility = if (item.description == "" || item.description == null) {
                 View.GONE
             } else {
                 View.VISIBLE

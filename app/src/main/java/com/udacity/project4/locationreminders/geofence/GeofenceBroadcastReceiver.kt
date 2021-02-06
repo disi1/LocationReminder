@@ -23,11 +23,11 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     private val TAG = GeofenceBroadcastReceiver::class.java.simpleName
     override fun onReceive(context: Context, intent: Intent) {
 
-        if(intent.action == ACTION_GEOFENCE_EVENT) {
+        if (intent.action == ACTION_GEOFENCE_EVENT) {
             val geofencingEvent = GeofencingEvent.fromIntent(intent)
             Log.d(TAG, geofencingEvent.triggeringGeofences.toString())
 
-            if(geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
                 GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
             }
         }

@@ -42,7 +42,8 @@ import org.koin.test.get
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 //END TO END test to black box test the app
-class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
+class RemindersActivityTest :
+    AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
@@ -52,7 +53,8 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
     private lateinit var saveReminderViewModel: SaveReminderViewModel
 
     @get:Rule
-    var activityTestRule: ActivityTestRule<RemindersActivity> = ActivityTestRule(RemindersActivity::class.java)
+    var activityTestRule: ActivityTestRule<RemindersActivity> =
+        ActivityTestRule(RemindersActivity::class.java)
 
     @Before
     fun registerIdlingResource() {
@@ -87,7 +89,7 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
                     get() as ReminderDataSource
                 )
             }
-            single { RemindersLocalRepository(get()) as ReminderDataSource}
+            single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(appContext) }
         }
         //declare a new koin module

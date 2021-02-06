@@ -38,7 +38,8 @@ class RemindersLocalRepositoryTest {
             RemindersDatabase::class.java
         ).allowMainThreadQueries().build()
 
-        remindersLocalRepository = RemindersLocalRepository(database.reminderDao(), Dispatchers.Main)
+        remindersLocalRepository =
+            RemindersLocalRepository(database.reminderDao(), Dispatchers.Main)
     }
 
     @After

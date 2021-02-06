@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationActivity
@@ -87,13 +88,21 @@ class ReminderListFragment : BaseFragment() {
         when (item.itemId) {
             R.id.logout -> {
                 AuthUI.getInstance().signOut(requireContext())
-                val intent = Intent(requireContext(), AuthenticationActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                requireActivity().startActivity(
-                    intent
-                )
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val activity = requireActivity()
+                            val intent =
+                                Intent(requireContext(), AuthenticationActivity::class.java)
+                            activity.startActivity(intent)
+                            activity.finish()
+                        } else {
+                            Snackbar.make(
+                                requireView(),
+                                getString(R.string.logout_unsuccessful),
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
             }
         }
         return super.onOptionsItemSelected(item)

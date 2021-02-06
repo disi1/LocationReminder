@@ -48,9 +48,21 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         viewModel.authenticationState.observe(this, { authenticationState ->
-            when(authenticationState) {
-                AuthenticationViewModel.AuthenticationState.AUTHENTICATED -> startActivity(Intent(this, RemindersActivity::class.java))
-                AuthenticationViewModel.AuthenticationState.UNAUTHENTICATED -> Log.e(TAG, "Not authenticated!")
+            when (authenticationState) {
+                AuthenticationViewModel.AuthenticationState.AUTHENTICATED -> {
+                    startActivity(
+                        Intent(
+                            this,
+                            RemindersActivity::class.java
+                        )
+                    )
+                    finish()
+                }
+
+                AuthenticationViewModel.AuthenticationState.UNAUTHENTICATED -> Log.e(
+                    TAG,
+                    "Not authenticated!"
+                )
                 else -> Log.e(TAG, "$authenticationState state that doesn't require any UI change.")
             }
         })
@@ -61,7 +73,7 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private fun launchSignInFlow() {
-        if(isNetworkAvailable()) {
+        if (isNetworkAvailable()) {
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
                 AuthUI.IdpConfig.GoogleBuilder().build()
@@ -73,14 +85,14 @@ class AuthenticationActivity : AppCompatActivity() {
                     .build(),
                 SIGN_IN_RESULT_CODE
             )
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_LONG).show()
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork ?: return false
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
@@ -93,7 +105,7 @@ class AuthenticationActivity : AppCompatActivity() {
             }
         } else {
             return try {
-                if(connectivityManager.activeNetworkInfo == null) {
+                if (connectivityManager.activeNetworkInfo == null) {
                     false
                 } else {
                     connectivityManager.activeNetworkInfo?.isConnected!!
@@ -107,9 +119,9 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == SIGN_IN_RESULT_CODE) {
+        if (requestCode == SIGN_IN_RESULT_CODE) {
             val response = IdpResponse.fromResultIntent(data)
-            if(resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Log.i(
                     TAG,
                     "Successfully signed in user " +

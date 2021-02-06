@@ -35,7 +35,8 @@ class RemindersListViewModelTest {
     fun setupViewModel() {
         stopKoin()
 
-        remindersListViewModel = RemindersListViewModel(ApplicationProvider.getApplicationContext(), fakeDataSource)
+        remindersListViewModel =
+            RemindersListViewModel(ApplicationProvider.getApplicationContext(), fakeDataSource)
     }
 
     @Test

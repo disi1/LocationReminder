@@ -19,20 +19,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reminder_title"
-            android:textSize="@dimen/text_size_normal"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"/>
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/reminder_title"
+            android:textSize="@dimen/text_size_normal" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{reminderDataItem.title}"
-            android:textSize="@dimen/text_size_large"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
-            tools:text="Find the hidden treasure"
-            android:textColor="@color/colorAccent"/>
+            android:text="@{reminderDataItem.title}"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_large"
+            tools:text="Find the hidden treasure" />
 
         <TextView
             android:layout_width="match_parent"
@@ -42,42 +43,43 @@
             android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/reminder_desc"
             android:textSize="@dimen/text_size_normal"
-            app:descriptionVisibility="@{reminderDataItem}"/>
+            app:descriptionVisibility="@{reminderDataItem}" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
             android:text="@{reminderDataItem.description}"
-            android:textSize="@dimen/text_size_large"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginLeft="@dimen/margin_normal"
             android:textColor="@color/black"
-            tools:text="Just walk around looking for anything that looks strange. You're very close!"
-            app:descriptionVisibility="@{reminderDataItem}"/>
+            android:textSize="@dimen/text_size_large"
+            app:descriptionVisibility="@{reminderDataItem}"
+            tools:text="Just walk around looking for anything that looks strange. You're very close!" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reminder_location"
-            android:textSize="@dimen/text_size_normal"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"/>
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/reminder_location"
+            android:textSize="@dimen/text_size_normal" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{reminderDataItem.location}"
-            android:textSize="@dimen/text_size_large"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
+            android:text="@{reminderDataItem.location}"
             android:textColor="@color/black"
-            tools:text="Golden Gate Bridge"/>
+            android:textSize="@dimen/text_size_large"
+            tools:text="Golden Gate Bridge" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_extra_large"
-            android:src="@drawable/undraw_reminder_pa79"/>
+            android:src="@drawable/undraw_reminder_pa79" />
 
     </LinearLayout>
 </layout>

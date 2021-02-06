@@ -104,7 +104,11 @@ class ReminderListFragmentTest {
             Navigation.setViewNavController(it.view!!, navController)
         }
 
-        onView(withText(getApplicationContext<Context>().getString(R.string.no_data))).check(matches(isDisplayed()))
+        onView(withText(getApplicationContext<Context>().getString(R.string.no_data))).check(
+            matches(
+                isDisplayed()
+            )
+        )
     }
 
     @Test
