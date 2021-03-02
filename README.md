@@ -1,22 +1,44 @@
 # Location Reminder
 
-A Todo list app with location reminders that remind the user to do something when he reaches a specific location. The app will require the user to create an account and login to set and access reminders.
+**Location Reminder** is a mobile application which acts as a to-do list which reminds you of what you set up to do when reaching a specific location. The app requires the user to create an account and login to set and access reminders.
 
-## Getting Started
+I developed this application as part of the Udacity's [Android Kotlin Developer Nanodegree](https://www.udacity.com/course/android-kotlin-developer-nanodegree--nd940) Program.
 
-1. Clone the project to your local machine.
-2. Open the project using Android Studio.
+I built the app using the **MVVM (Model-View-ViewModel) architecture pattern** - to allow fast reaction to design changes; the **Repository Pattern** - to facilitate separation of concerns; and **Dependency Injection** - to provide ease of testing.
 
-### Dependencies
+Location Reminder uses [FirebaseUI Authentication](https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md) (for personalized use) and **Google Maps** with **Geofences** (for each reminder, a geofencing request is created in the background which triggers a notification when you enter the geofencing area).
+
+### The app leverages the following components from the Jetpack library:
+
+* [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+* [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+* [Data Binding](https://developer.android.com/topic/libraries/data-binding/)
+* [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/)
+* [Room](https://developer.android.com/training/data-storage/room)
+* [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview) - to display the asteroids in a list.
+
+### Testing
+
+For testing, I used [Espresso](https://developer.android.com/training/testing/espresso), [Mockito](https://github.com/mockito/mockito), and [Koin](https://github.com/InsertKoinIO/koin) to build a large test suite consisting of local and instrumented tests.
+
+The test suite includes:
+- Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app
+- Testing for Snackbar and Toast messages
+- End-to-End testing for Fragments Navigation
+- Testing for ViewModels, Coroutines, and LiveData
+- Testing for the DAO (Data Access Object) and Repository classes
+- Testing for the error messages
+
+### Break Down Tests
 
 ```
-1. A created project on Firebase console.
-2. A create a project on Google console.
+1.androidTest
+        //TODO: explain the tests here.
+2. test
+        //TODO: explain the tests here.
 ```
 
-### Installation
-
-Step by step explanation of how to get a dev environment running.
+## Setting up the Repository
 
 ```
 1. To enable Firebase Authentication:
@@ -32,49 +54,19 @@ Step by step explanation of how to get a dev environment running.
 3. Run the app on your mobile phone or emulator with Google Play Services in it.
 ```
 
-## Testing
+## Application flow
+Take a look at the things you can do with this app:
 
-Right click on the `test` or `androidTest` packages and select Run Tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
-```
-1.androidTest
-        //TODO: Students explain their testing here.
-2. test
-        //TODO: Students explain their testing here.
-```
-
-## Project Instructions
-    1. Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
-    2. Create a Register screen to allow a user to register using an email address or a Google account.
-    3. Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
-    4. Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
-    5. Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
-        a. title
-        b. description
-        c. selected location
-    6. Reminder data should be saved to local storage.
-    7. For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
-    8. Provide testing for the ViewModels, Coroutines and LiveData objects.
-    9. Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-    10. Use Espresso and Mockito to test each screen of the app:
-        a. Test DAO (Data Access Object) and Repository classes.
-        b. Add testing for the error messages.
-        c. Add End-To-End testing for the Fragments navigation.
+<img src="screenshots/screen_1" width="400px"/>
+<img src="screenshots/screen_2" width="400px"/>
+<img src="screenshots/screen_3" width="400px"/>
+<img src="screenshots/screen_4" width="400px"/>
+<img src="screenshots/screen_5" width="400px"/>
+<img src="screenshots/screen_6" width="400px"/>
+<img src="screenshots/screen_7" width="400px"/>
+<img src="screenshots/screen_8" width="400px"/>
+<img src="screenshots/screen_9" width="400px"/>
 
 
-## Student Deliverables:
-
-1. APK file of the final project.
-2. Git Repository with the code.
-
-## Built With
-
-* [Koin](https://github.com/InsertKoinIO/koin) - A pragmatic lightweight dependency injection framework for Kotlin.
-* [FirebaseUI Authentication](https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md) - FirebaseUI provides a drop-in auth solution that handles the UI flows for signing
-* [JobIntentService](https://developer.android.com/reference/androidx/core/app/JobIntentService) - Run background service from the background application, Compatible with >= Android O.
-
-## License
+## Get in touch
+Reach out at [diana.sica29@gmail.com](mailto:diana.sica29@gmail.com)
