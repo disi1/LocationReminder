@@ -57,15 +57,15 @@ The test suite includes:
 ## Application flow
 Take a look at the things you can do with this app:
 
-<img src="screenshots/screen_1" width="400px"/>
-<img src="screenshots/screen_2" width="400px"/>
-<img src="screenshots/screen_3" width="400px"/>
-<img src="screenshots/screen_4" width="400px"/>
-<img src="screenshots/screen_5" width="400px"/>
-<img src="screenshots/screen_6" width="400px"/>
-<img src="screenshots/screen_7" width="400px"/>
-<img src="screenshots/screen_8" width="400px"/>
-<img src="screenshots/screen_9" width="400px"/>
+<img src="screenshots/screen_1.png" width="400px"/>
+<img src="screenshots/screen_2.png" width="400px"/>
+<img src="screenshots/screen_3.png" width="400px"/>
+<img src="screenshots/screen_4.png" width="400px"/>
+<img src="screenshots/screen_5.png" width="400px"/>
+<img src="screenshots/screen_6.png" width="400px"/>
+<img src="screenshots/screen_7.png" width="400px"/>
+<img src="screenshots/screen_8.png" width="400px"/>
+<img src="screenshots/screen_9.png" width="400px"/>
 
 
 ## Get in touch
